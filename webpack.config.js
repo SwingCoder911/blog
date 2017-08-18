@@ -5,20 +5,34 @@ var BUILD_DIR = path.resolve(__dirname, 'public');
 var APP_DIR = path.resolve(__dirname, 'src');
 
 var config = {
-  entry: APP_DIR + '/main.jsx',
-  module : {
+  entry: {
+    main: APP_DIR + '/main.jsx'
+  },  
+  module: {    
     loaders : [
       {
         test : /\.jsx?/,
         include : APP_DIR,
-        loader : 'babel-loader'
+        loaders: ['react-hot-loader', 'babel-loader']
+      },
+      {
+        test: /\.html$/,
+        loader: "file-loader?name=[name].[ext]",
       }
     ]
   },
+  devServer: {
+    publicPath: "/",
+    contentBase: "./public",
+    hot: true
+  },
   output: {
     path: BUILD_DIR,
-    filename: 'bundle.js'
-  }
+    publicPath: "/",
+    filename: '[name].bundle.js',
+    sourceMapFilename: '[name].map'
+  },
+  watch: true
 };
 
 module.exports = config;

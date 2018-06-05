@@ -6,14 +6,18 @@ var APP_DIR = path.resolve(__dirname, 'src');
 
 var config = {
   entry: {
-    main: APP_DIR + '/main.jsx'
+    main: APP_DIR + '/client/js/main.js'
   },  
   module: {    
     loaders : [
       {
-        test : /\.jsx?/,
+        test : /\.js?/,
         include : APP_DIR,
-        loaders: ['react-hot-loader', 'babel-loader']
+        exclude: '/node_modules/',
+        loader: 'babel-loader',
+        query: {
+          presets: ['react', 'es2015']
+        }
       },
       {
         test: /\.html$/,

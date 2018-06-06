@@ -14,10 +14,7 @@ var config = {
         test : /\.js?/,
         include : APP_DIR,
         exclude: '/node_modules/',
-        loader: 'babel-loader',
-        query: {
-          presets: ['react', 'es2015']
-        }
+        loader: 'babel-loader'
       },
       {
         test: /\.html$/,

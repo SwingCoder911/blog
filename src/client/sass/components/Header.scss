@@ -1,0 +1,23 @@
+@import '../base/variables';
+@import '../base/reset';
+
+.header{
+    background: $background-colour;
+}
+
+.nav-list{
+    width: 50%;
+    margin: 0 auto;
+    min-width: 20rem;
+    display: flex;
+    flex-direction: row;
+    li{
+        flex: 1;
+        padding: 1rem 0;
+        text-align: center;
+
+        &.active{
+            border-bottom: 3px solid $secondary-colour;
+        }
+    }
+}

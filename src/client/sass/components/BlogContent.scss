@@ -3,3 +3,20 @@
 .blog-content{
     text-align: center;
 }
+
+.blog-list{
+    width: 45%;
+    min-width: 15rem;
+    margin: 3rem auto;
+
+    .blog-list-item{
+        margin: 1rem 0;
+        padding: 1rem 0;
+        border-left: 3px solid $secondary-colour;
+        .list-item-title{
+            font-size: 1.5rem;
+            font-style: italic;
+            margin-right: 1rem;
+        }
+    }
+}

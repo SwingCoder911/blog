@@ -3,6 +3,7 @@ import {render} from 'react-dom';
 
 import Header from './components/Header';
 import BlogContent from './components/BlogContent';
+import BlogIntro from './components/BlogIntro';
 
 require("../views/index.html");
 require('../fonts/nowayregular.scss');
@@ -12,6 +13,7 @@ class Blog extends React.Component {
     return (
       <section className="blog-container">
         <Header />
+        <BlogIntro />
         <BlogContent/>
       </section>      
     );

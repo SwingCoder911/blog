@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
+let CopyWebpackPlugin = require('copy-webpack-plugin');
 
 var BUILD_DIR = path.resolve(__dirname, 'public');
 var APP_DIR = path.resolve(__dirname, 'src');
@@ -64,6 +65,11 @@ var config = {
     filename: '[name].bundle.js',
     sourceMapFilename: '[name].map'
   },
+  plugins: [
+    new CopyWebpackPlugin([
+		{ from: 'src/client/images', to: 'images'}
+    ])
+  ],
   watch: true
 };
 

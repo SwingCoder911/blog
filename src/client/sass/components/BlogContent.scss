@@ -2,6 +2,7 @@
 @import '../base/reset';
 .blog-content{
     text-align: center;
+    margin-top: $blog-intro-height;
 }
 
 .blog-list{
@@ -10,9 +11,8 @@
     margin: 3rem auto;
 
     .blog-list-item{
-        margin: 1rem 0;
+        margin: 2rem 0;
         padding: 1rem 0;
-        border-left: 3px solid $secondary-colour;
         .list-item-title{
             font-size: 1.5rem;
             font-style: italic;

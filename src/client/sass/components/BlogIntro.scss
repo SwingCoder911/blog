@@ -1,0 +1,17 @@
+@import '../base/variables';
+@import '../base/reset';
+
+.blog-intro{
+    width: 100%;
+    height: $blog-intro-height;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: -1;
+    img{
+        width: 100%;
+        position: relative;
+        top: -#{$blog-intro-height};
+    }
+}

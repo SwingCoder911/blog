@@ -1,4 +1,10 @@
+# Ignoring node modules
 node_modules
 node_modules/*
+
+# Ignoring public directory
 public
 public/*
+
+#Ignoring database config
+src/server/config/dbConfig.js

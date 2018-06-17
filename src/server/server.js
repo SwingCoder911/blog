@@ -15,6 +15,7 @@ app.get('/', (req, res) => {
 
 app.get('/api/bloglist/:category', (req, res) => {
     let { category } = req.params;
+    console.log("Category: ", category);
     blogController.GetCategory(category)
         .then((response) => {
             res.send(`Here's your blog! ${response}`);
@@ -23,6 +24,16 @@ app.get('/api/bloglist/:category', (req, res) => {
             res.sendStatus(400);
         });    
 });
+
+app.get('/api/bloglist/', (req, res) => {
+    blogController.GetCategoryList()
+        .then(response => {
+            res.send(categoriesResponse);
+        })
+        .catch(error => {
+            res.sendStatus(400);
+        })
+})
 
 app.listen(80, function(){
     console.log("listening to this joint on port 9000");

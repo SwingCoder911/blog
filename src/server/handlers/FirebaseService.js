@@ -18,105 +18,73 @@ class FirebaseService{
             }
         }
         this.Con = firebase.database();
-        this.Authenticate();
-        this.Con.ref().once('value')
+        this.Authenticate()
+            .then(() => {
+                return this.Con.ref().once('value');
+            })
             .then(function (snap) {
-                //console.log('snap.val(): ', snap.val());
+                console.log('snap.val(): ', snap.val());
+            })
+            .catch(error => {
+                console.log("Connection error: ", error);
             });
+        
     }
     Authenticate(){
-        firebase.auth().signInWithEmailAndPassword(dbConfig.firebase.signinEmail, dbConfig.firebase.signinPassword)
-            .catch(function(sError) {
-                console.log("Sign in error: ", sError)
-                firebase.auth().createUserWithEmailAndPassword(dbConfig.firebase.signinEmail, dbConfig.firebase.signinPassword)
-                    .catch((cError) => {
-                        console.log("Error with auth: ", cError);
-                    });
-            });
+        return new Promise((resolve, reject) => {
+            firebase.auth().signInWithEmailAndPassword(dbConfig.firebase.signinEmail, dbConfig.firebase.signinPassword)
+                .then(() => {
+                    resolve();
+                })
+                .catch(function(sError) {
+                    console.log("Sign in error: ", sError)
+                    return firebase.auth().createUserWithEmailAndPassword(dbConfig.firebase.signinEmail, dbConfig.firebase.signinPassword);
+                })
+                .then(() => {
+                    resolve();
+                })
+                .catch((cError) => {
+                    console.log("Error with auth: ", cError);
+                    reject(cError);
+                });
+        });
+        
     }
 
-    GetEvents(){
+    GetCategoryList(){
         return new Promise((resolve, reject) => {
-            this.Con.ref('events').once('value')
+            this.Con.ref('categories').once('value')
                 .then((snapshot) => {
-                    //console.log("Events: ", snapshot.val());
+                    console.log("Categories: ", snapshot.val());
                     resolve(snapshot.val());
+                })
+                .catch(error => {
+                    console.log("Get category list error: ", error);
+                    reject(error);
                 });
         });
     }
     /**
      * Figure out a key to write the event to the database
      */
-    WriteEventToFirebase(eventkey, event){
+    GetCategoryHistory(categoryId){
         return new Promise((resolve, reject) => {
-            this.Con.ref('events/' + eventkey).set(event, () => resolve());
-        });        
-    }
-    WriteAccountToFirebase(account){
-        return new Promise((resolve, reject) => {
-            this.Con.ref('accounts').push(account.toJSON(), () => resolve());
-        });
-    }
-    WriteAttendanceToEvent(eventId, accountId){
-        return new Promise((resolve, reject) => {
-            this.Con.ref('eventAttendees/' + eventId).orderByChild('accountId').equalTo(accountId).once('value', (snapshot) => {
-                if(snapshot.exists()){//Add logging here
-                    console.log("Already exists!");
-                    reject("Exists");
-                }else{
-                    console.log("Pushing: ", accountId);
-                    this.Con.ref('eventAttendees/' + eventId + '/').push({ accountId }, () => resolve(accountId));
-                }
-            });            
-        });
-    }
-    TestCon(){
-        return new Promise((resolve, reject) => {
-            console.log("set");
-            this.Con.ref('test/').set({test: true}, (res) => {
-                console.log("Set complete!: ", res);
-                
-            });
-        });
-    }
-    GetDancersByDivision(division){
-        let ref = this.Con.ref('dancers');
-        ref.orderByChild('Division').equalTo(DancerDef.SanitizeDivision(division)).once('value')
-            .then((snapshot) => {
-                console.log(snapshot.val());
-            });
-    }
-    //Create synthetic indexes for the division/role/qualifies
-    GetDancersByDivisionRoleQualifies(divisionInput, roleInput, qualifies){        
-        return new Promise((resolve, reject) => {
-            let division = DancerDef.SanitizeDivision(divisionInput),
-                role = DancerDef.SanitizeRole(roleInput);
-            if(division === null){
-                reject("Bad division input.");
-                return;
-            }
-            if(role === null){
-                reject("Bad role input.");
-                return;
-            }
-            let key = `${division}-${role}${(qualifies) ? '-q' : ''}`;
-            let ref = this.Con.ref('dancers');
-            ref.orderByChild('DivisionRoleQualifies').equalTo(key).once('value')
-                .then((snapshot) => {
-                    let compMap = snapshot.val(), dancersArray = [];
-                    for(let key in compMap){
-                        dancersArray.push(new DancerDef(compMap[key]));
-                    }
-                    resolve(dancersArray);
+            this.Con.ref('categories/' + categoryId).once('value')
+                .then(snapshot => {
+                    console.log("Found category: ", snapshot.val());
+                    resolve(snapshot.val());
                 })
-                .catch((error) => {
-                    console.log("Error: ", error);
+                .catch(error => {
+                    console.log("Get category history error: ", error);
                     reject(error);
                 });
         });        
     }
+    GetBlog(categoryId, blogId){
+        return new Promise((resolve, reject) => {
+            this.Con.ref('events/' + eventkey).set(event, () => resolve());
+        });  
+    }
 };
 
-module.exports = function(){
-    return new FirebaseService();
-};
+module.exports = FirebaseService;
